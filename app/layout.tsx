@@ -1,9 +1,16 @@
+import "@radix-ui/themes/styles.css";
+import "./theme-config.css";
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import NavBar from "./navBar";
+import { Theme, ThemePanel } from "@radix-ui/themes";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,9 +24,12 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <NavBar />
-        <main className="p-4">{children}</main>
+      <body className={inter.variable}>
+        <Theme>
+          <NavBar />
+          <main className="p-4">{children}</main>
+          <ThemePanel />
+        </Theme>
       </body>
     </html>
   );

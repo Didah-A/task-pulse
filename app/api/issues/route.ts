@@ -1,5 +1,4 @@
 import Issue from "@/models/issues";
-import connectToDB from "@/lib/database";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
