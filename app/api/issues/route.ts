@@ -1,15 +1,6 @@
+import { createIssueSchema } from "@/app/validation/createIssueSchema";
 import Issue from "@/models/issues";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const createIssueSchema = z.object({
-  title: z.string().min(3).max(255),
-  description: z.string().min(5),
-  creator: z.object({
-    name: z.string().max(255),
-    creatorId: z.string(),
-  }),
-});
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

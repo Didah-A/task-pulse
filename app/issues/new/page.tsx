@@ -1,24 +1,36 @@
 "use client";
+import CalloutComponent from "@/app/components/callout";
+import ErrorDisplay from "@/app/components/errorDisplay";
+import LoadingSpinner from "@/app/components/loadingSpinner";
 import useCreateIssue, { ICreateIssueData } from "@/app/hooks/useCreateIssue";
+import { createIssueSchema } from "@/app/validation/createIssueSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
+import { z } from "zod";
 
-interface IssueForm {
-  title: string;
-  description: string;
-}
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
-  const { register, control, handleSubmit, reset } = useForm<IssueForm>();
-  const [disabled, setDisabled] = useState(false);
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { isValid, errors },
+  } = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema),
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const createIssue = useCreateIssue();
 
   const handleSave = async (data: ICreateIssueData) => {
-    setDisabled(true);
+    setIsSubmitting(true);
     const newData = {
       creator: {
         name: "Didacus",
@@ -30,34 +42,49 @@ const NewIssuePage = () => {
       const issue = await createIssue(newData);
 
       if (issue.status === 201) {
-        setDisabled(false);
+        setIsSubmitting(false);
         reset();
       } else {
-        setDisabled(false);
+        setIsSubmitting(false);
       }
     } catch (error) {
-      setDisabled(false);
-      console.log(error);
+      setIsSubmitting(false);
+      setError("An unexpected error occured");
     }
   };
 
   return (
-    <form
-      className="max-w-xl space-y-4"
-      onSubmit={handleSubmit((data) => handleSave(data))}
-    >
-      <TextField.Root placeholder="Title" {...register("title")} />
-      <Controller
-        name="description"
-        control={control}
-        render={({ field }) => (
-          <SimpleMDE placeholder="Description" {...field} />
-        )}
-      />
-      <Button type="submit" disabled={disabled}>
-        Submit new issue
-      </Button>
-    </form>
+    <div>
+      <div className="max-w-xl space-y-4">
+        {error && <CalloutComponent text={error} />}
+      </div>
+      <form
+        className="max-w-xl "
+        onSubmit={handleSubmit((data) => handleSave(data))}
+        onChange={() => setError(null)}
+      >
+        <TextField.Root
+          placeholder="Title"
+          {...register("title")}
+          className="space-y-4"
+        />
+        {errors.title && <ErrorDisplay error={errors.title.message} />}
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <SimpleMDE
+              placeholder="Description"
+              {...field}
+              className="space-y-4"
+            />
+          )}
+        />
+        <Button type="submit" disabled={isSubmitting || !isValid}>
+          Submit new issue {isSubmitting && <LoadingSpinner />}
+        </Button>
+      </form>
+    </div>
   );
 };
 
