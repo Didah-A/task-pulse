@@ -22,9 +22,6 @@ const IssueSchema = new Schema<IIssue>({
     type: String,
     required: [true, "Description is required!"],
   },
-  creatorId: {
-    type: String,
-  },
   creator: {
     type: new Schema({
       name: {
@@ -36,6 +33,7 @@ const IssueSchema = new Schema<IIssue>({
         required: [true, "Creator Id is required!"],
       },
     }),
+    required: false,
   },
   status: {
     type: String,
