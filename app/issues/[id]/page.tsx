@@ -1,7 +1,7 @@
 "use client";
 
 import IssueStatusBadge from "@/app/components/issueStatusBadge";
-import useGetIssueById from "@/app/hooks/useGetIssueById";
+import useGetIssueById from "@/hooks/useGetIssueById";
 import { Card, Heading, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";

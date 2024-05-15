@@ -2,8 +2,8 @@
 
 import { Table } from "@radix-ui/themes";
 import IssueStatusBadge from "../components/issueStatusBadge";
-import useGetIssues from "../hooks/useGetIssues";
-import Link from "next/link";
+import useGetIssues from "../../hooks/useGetIssues";
+import Link from "../components/link";
 
 const IssuesList = () => {
   const { data: issues } = useGetIssues();
@@ -24,7 +24,7 @@ const IssuesList = () => {
       <Table.Body>
         {issues?.map((issue) => (
           <Table.Row key={issue._id}>
-            <Table.Cell>
+            <Table.Cell className="">
               <Link href={`/issues/${issue._id}`}>
                 {issue.title}
                 <div className="block md:hidden mt-3">

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { findAllIssues } from "../services/issueService";
-import { IssueType } from "../types";
+import { IssueType } from "../app/types";
 
 export const getIssuesQuery = () => ["issues"];
 

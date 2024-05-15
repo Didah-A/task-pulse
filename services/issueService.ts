@@ -1,6 +1,6 @@
 import { apiClient } from "./apiClient";
-import { IssueType } from "../types";
-import { ICreateIssueData } from "../types";
+import { IssueType } from "../app/types";
+import { ICreateIssueData } from "../app/types";
 
 export const findAllIssues = async () => {
   const res = await apiClient.get<IssueType[]>("/issues");

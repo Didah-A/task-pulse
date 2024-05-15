@@ -3,16 +3,20 @@ import CalloutComponent from "@/app/components/callout";
 import ErrorDisplay from "@/app/components/errorDisplay";
 import LoadingSpinner from "@/app/components/loadingSpinner";
 import { ICreateIssueData } from "@/app/types";
-import { createIssue } from "@/app/services/issueService";
 import { createIssueSchema } from "@/app/validation/createIssueSchema";
+import { createIssue } from "@/services/issueService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextField } from "@radix-ui/themes";
 import { useMutation } from "@tanstack/react-query";
 import "easymde/dist/easymde.min.css";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
