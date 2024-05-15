@@ -1,15 +1,16 @@
 "use client";
 
+import IssueStatusBadge from "@/app/components/issueStatusBadge";
 import useGetIssueById from "@/app/hooks/useGetIssueById";
+import { Card, Heading, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-import React from "react";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
   params: { id: string };
 }
 
 const IssueDetailsPage = ({ params: { id } }: Props) => {
-  console.log(id);
   const { data: issueDetails, isLoading } = useGetIssueById(id);
 
   if (!issueDetails && !isLoading) notFound();
@@ -18,10 +19,14 @@ const IssueDetailsPage = ({ params: { id } }: Props) => {
     <div>
       {issueDetails && (
         <>
-          <p>{issueDetails?.title}</p>
-          <p>{issueDetails?.description}</p>
-          <p>{issueDetails?.status}</p>
-          <p>{new Date(issueDetails?.createdAt!).toDateString()}</p>
+          <Heading>{issueDetails?.title}</Heading>
+          <div className="flex gap-8 mt-4 mb-4">
+            <IssueStatusBadge status={issueDetails.status} />
+            <Text>{new Date(issueDetails?.createdAt!).toDateString()}</Text>
+          </div>
+          <Card className="prose">
+            <ReactMarkdown>{issueDetails.description}</ReactMarkdown>
+          </Card>
         </>
       )}
     </div>
