@@ -3,6 +3,7 @@
 import { Table } from "@radix-ui/themes";
 import React from "react";
 import useGetIssues from "../hooks/useGetIssues";
+import IssueStatusBadge from "../components/issueStatusBadge";
 
 const IssuesList = () => {
   const { data: issues } = useGetIssues();
@@ -25,10 +26,12 @@ const IssuesList = () => {
           <Table.Row key={issue._id}>
             <Table.Cell>
               {issue.title}
-              <div className="block md:hidden">{issue.status}</div>
+              <div className="block md:hidden mt-3">
+                <IssueStatusBadge status={issue.status} />
+              </div>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              {issue.status}
+              <IssueStatusBadge status={issue.status} />
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               {new Date(issue.createdAt).toDateString()}
