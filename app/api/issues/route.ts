@@ -37,5 +37,12 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  return NextResponse.json("hahaha", { status: 200 });
+  try {
+    const issues = await Issue.find({ "creator.creatorId": "123" });
+    return NextResponse.json(issues, { status: 200 });
+  } catch (error) {
+    return NextResponse.json("An unexpected error has occured!", {
+      status: 500,
+    });
+  }
 }

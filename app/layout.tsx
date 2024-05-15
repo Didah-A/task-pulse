@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import NavBar from "./navBar";
 import { Theme, ThemePanel } from "@radix-ui/themes";
+import ReactQueryProvider from "@/utils/reactQueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,9 @@ export default async function RootLayout({
       <body className={inter.variable}>
         <Theme>
           <NavBar />
-          <main className="p-4">{children}</main>
+          <main className="p-4">
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </main>
           <ThemePanel />
         </Theme>
       </body>

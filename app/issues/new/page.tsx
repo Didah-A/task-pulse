@@ -2,10 +2,12 @@
 import CalloutComponent from "@/app/components/callout";
 import ErrorDisplay from "@/app/components/errorDisplay";
 import LoadingSpinner from "@/app/components/loadingSpinner";
-import useCreateIssue, { ICreateIssueData } from "@/app/hooks/useCreateIssue";
+import { ICreateIssueData } from "@/app/types";
+import { createIssue } from "@/app/services/issueService";
 import { createIssueSchema } from "@/app/validation/createIssueSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextField } from "@radix-ui/themes";
+import { useMutation } from "@tanstack/react-query";
 import "easymde/dist/easymde.min.css";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -24,10 +26,11 @@ const NewIssuePage = () => {
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createIssue = useCreateIssue();
+  const { mutateAsync: postIssue } = useMutation({ mutationFn: createIssue });
 
   const handleSave = async (data: ICreateIssueData) => {
     setIsSubmitting(true);
@@ -39,9 +42,9 @@ const NewIssuePage = () => {
       ...data,
     };
     try {
-      const issue = await createIssue(newData);
+      const issue = await postIssue(newData);
 
-      if (issue.status === 201) {
+      if (!!issue._id) {
         setIsSubmitting(false);
         reset();
       } else {
@@ -55,7 +58,7 @@ const NewIssuePage = () => {
 
   return (
     <div>
-      <div className="max-w-xl space-y-4">
+      <div className="max-w-xl mb-4">
         {error && <CalloutComponent text={error} />}
       </div>
       <form

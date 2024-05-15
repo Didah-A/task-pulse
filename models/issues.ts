@@ -43,11 +43,12 @@ const IssueSchema = new Schema<IIssue>({
   },
   createdAt: {
     type: Date,
+    immutable: true,
     default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: null,
+    default: Date.now,
   },
 });
 
