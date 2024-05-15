@@ -1,12 +1,12 @@
-"use client";
-
 import { Table } from "@radix-ui/themes";
+import React from "react";
 import IssueStatusBadge from "../components/issueStatusBadge";
-import useGetIssues from "../hooks/useGetIssues";
 
-const IssuesList = () => {
-  const { data: issues } = useGetIssues();
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
+const Loading = () => {
+  const issues = [1, 2, 3, 4, 5, 6];
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -22,18 +22,18 @@ const IssuesList = () => {
       </Table.Header>
       <Table.Body>
         {issues?.map((issue) => (
-          <Table.Row key={issue._id}>
+          <Table.Row key={issue}>
             <Table.Cell>
-              {issue.title}
+              <Skeleton />
               <div className="block md:hidden mt-3">
-                <IssueStatusBadge status={issue.status} />
+                <Skeleton />
               </div>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              <IssueStatusBadge status={issue.status} />
+              <Skeleton />
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              {new Date(issue.createdAt).toDateString()}
+              <Skeleton />
             </Table.Cell>
           </Table.Row>
         ))}
@@ -42,4 +42,4 @@ const IssuesList = () => {
   );
 };
 
-export default IssuesList;
+export default Loading;
