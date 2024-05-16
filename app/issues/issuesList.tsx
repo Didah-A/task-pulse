@@ -4,9 +4,12 @@ import { Table } from "@radix-ui/themes";
 import IssueStatusBadge from "../components/issueStatusBadge";
 import useGetIssues from "../../hooks/useGetIssues";
 import Link from "../components/link";
+import LoadingIssues from "./loading";
 
 const IssuesList = () => {
-  const { data: issues } = useGetIssues();
+  const { data: issues, isLoading } = useGetIssues();
+
+  if (isLoading) return <LoadingIssues />;
 
   return (
     <Table.Root variant="surface">

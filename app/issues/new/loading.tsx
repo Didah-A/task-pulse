@@ -1,10 +1,10 @@
-import LoadingSpinner from "@/app/components/loadingSpinner";
 import React from "react";
+import IssueFormSkeleton from "../_components/issueFormSkeleton";
 
 const LoadingNewIssuePage = () => {
   return (
     <div>
-      <LoadingSpinner />
+      <IssueFormSkeleton />
     </div>
   );
 };

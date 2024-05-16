@@ -17,8 +17,14 @@ export const createIssue = async (data: ICreateIssueData) => {
   return response.data;
 };
 
-export const updateIssue = async (data: ICreateIssueData) => {
-  const response = await apiClient.put<IssueType>("/issues", data);
+export const updateIssue = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: ICreateIssueData;
+}) => {
+  const response = await apiClient.patch<IssueType>(`/issues/${id}`, data);
   return response.data;
 };
 

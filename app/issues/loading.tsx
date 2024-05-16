@@ -2,7 +2,7 @@ import { Table } from "@radix-ui/themes";
 import React from "react";
 import Skeleton from "@/app/components/skeleton";
 
-const Loading = () => {
+const LoadingIssues = () => {
   const issues = [1, 2, 3, 4, 5, 6];
   return (
     <Table.Root variant="surface">
@@ -39,4 +39,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default LoadingIssues;
