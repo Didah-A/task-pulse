@@ -1,8 +1,10 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SiTask } from "react-icons/si";
+import UserDropdownMenu from "./userDropdownMenu";
 
 const NavBar = () => {
   const currentPath = usePathname();
@@ -19,14 +21,15 @@ const NavBar = () => {
   ];
 
   const isActiveLink = (link: string) => link === currentPath;
+  const { status, data: session } = useSession();
 
   return (
     <nav className="flex justify-between p-4 border-b mb-4 items-center">
-      <Link href="/" className="flex gap-3 items-center">
-        <SiTask size={40} />
-        <span className="font-semibold">Task Pulse</span>
-      </Link>
-      <section className="flex gap-6">
+      <section className="flex gap-8 items-center">
+        <Link href="/" className="flex gap-3 items-center">
+          <SiTask size={40} />
+          <span className="font-semibold">Task Pulse</span>
+        </Link>
         {navLinks.map((link) => (
           <Link
             key={link.name}
@@ -38,6 +41,17 @@ const NavBar = () => {
             {link.name}
           </Link>
         ))}
+      </section>
+      <section className="flex gap-6">
+        <section>
+          {status === "authenticated" && <UserDropdownMenu session={session} />}
+          {status !== "authenticated" && (
+            <div className="flex gap-3">
+              <Link href={"/api/auth/signin"}>Sign in</Link>
+              {/* <Link href={"/register"}>Register</Link> */}
+            </div>
+          )}
+        </section>
       </section>
     </nav>
   );

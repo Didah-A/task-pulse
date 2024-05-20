@@ -9,13 +9,16 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import DeleteIssueButton from "../_components/deleteButton";
 import LoadingIssueDetails from "./loading";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 interface Props {
   params: { id: string };
 }
 
-const IssueDetailsPage = ({ params: { id } }: Props) => {
+const IssueDetailsPage = async ({ params: { id } }: Props) => {
   const { data: issueDetails, isLoading } = useGetIssueById(id);
+  const session = await getServerSession(authOptions);
 
   if (isLoading) {
     return <LoadingIssueDetails />;
@@ -37,17 +40,19 @@ const IssueDetailsPage = ({ params: { id } }: Props) => {
               <ReactMarkdown>{issueDetails.description}</ReactMarkdown>
             </Card>
           </div>
-          <div className="flex gap-4">
-            <Button>
-              <Link
-                href={`/issues/${id}/edit`}
-                className="flex items-center gap-2"
-              >
-                <Pencil2Icon /> Edit
-              </Link>
-            </Button>
-            <DeleteIssueButton issueId={issueDetails._id} />
-          </div>
+          {session && (
+            <div className="flex gap-4">
+              <Button>
+                <Link
+                  href={`/issues/${id}/edit`}
+                  className="flex items-center gap-2"
+                >
+                  <Pencil2Icon /> Edit
+                </Link>
+              </Button>
+              <DeleteIssueButton issueId={issueDetails._id} />
+            </div>
+          )}
         </>
       )}
     </div>
